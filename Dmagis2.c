@@ -61,7 +61,7 @@ void tambahSekolah(){
 
 void hapusSekolah(){
     char nama_sekolah[50];
-    printf("Nama Sekolah:");scanf("%s", nama_sekolah);
+    printf("Nama Sekolah:");gets(nama_sekolah);
     for (int i = 0; i < jumlah_sekolah; i++){
         if (strcmp(sekolahs[i].nama_sekolah, nama_sekolah) == 0){
             for (int j = i; j < jumlah_sekolah -1 ; j ++){
@@ -85,8 +85,8 @@ void lihatDataVendor(){
 
 void hubungkanSekolah(){
     char namaVendor[50], namasekolah[50];
-    printf("Nama Vendor:");scanf("%s", namaVendor);
-    printf("Nama Sekolah:");scanf("%s", namasekolah);
+    printf("Nama Vendor:");gets(namaVendor);
+    printf("Nama Sekolah:");gets(namasekolah);
 
     for (int i = 0; i < jumlah_vendor; i ++){
         if(strcmp(vendors[i].nama_vendor, namaVendor) == 0 && vendors[i].sekolahTerhubung == -1){
@@ -117,7 +117,7 @@ void lihatDataKerjasama(){
 void ubahStatus(){
     char namaVendor[50];
     int pilihan;
-    printf("Nama Vendor: ");scanf("%s", namaVendor);
+    printf("Nama Vendor: ");gets(namaVendor);
 
     for (int i = 0; i < jumlah_vendor; i++ ){
         if(strcmp(vendors[i].nama_vendor, namaVendor) == 0){
