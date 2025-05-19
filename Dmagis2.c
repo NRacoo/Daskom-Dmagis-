@@ -52,7 +52,7 @@ void sortingVendor(){
 }
 
 void tambahSekolah(){
-    printf("Nama Sekolah:");scanf("%s", sekolahs[jumlah_sekolah].nama_sekolah);
+    printf("Nama Sekolah:");gets(sekolahs[jumlah_sekolah].nama_sekolah);
     printf("Jumlah Siswa:");scanf("%d", &sekolahs[jumlah_sekolah].jumlah_siswa);
     sekolahs[jumlah_sekolah].sudahTerhubung = 0;
     jumlah_sekolah++;
