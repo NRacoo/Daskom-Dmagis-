@@ -77,7 +77,7 @@ void hapusSekolah(){
 
 void lihatDataVendor(){
     sortingVendor();
-    printf("Daftar Vendpor: \n");
+    printf("Daftar Vendor: \n");
     for (int i = 0; i < jumlah_vendor; i ++){
         printf("- %s \n", vendors[i].nama_vendor);
     }
@@ -132,9 +132,10 @@ void ubahStatus(){
 }
 
 void tambahVendor(){
+    getchar();
     printf ("-- Sign Up Vendor --\n");
-    printf ("Nama Vendor: ");scanf("%s", vendors[jumlah_vendor].nama_vendor);
-    printf ("Password: ");scanf("%s", vendors[jumlah_vendor].password);
+    printf ("Nama Vendor: ");gets( vendors[jumlah_vendor].nama_vendor);
+    printf ("Password: ");gets(vendors[jumlah_vendor].password);
     vendors[jumlah_vendor].sudahTerdaftar = 1;
     vendors[jumlah_vendor].sekolahTerhubung = -1;
     vendors[jumlah_vendor].jumlah_menu = 0;
@@ -156,13 +157,14 @@ void menuVendor(int id){
 
         switch(pilih){
             case 1:
+            getchar();
             if(vendors[id].jumlah_menu < MAX_menu){
-                printf("Masukan nama menu hari ke-%d: ", vendors[id].jumlah_menu +1);
-                printf("Karbohidrat:");scanf("%s", vendors[id].menu[vendors[id].jumlah_menu].karbohidrat);
-                printf("Protein:");scanf("%s", vendors[id].menu[vendors[id].jumlah_menu].protein);
-                printf("Sayur:");scanf("%s", vendors[id].menu[vendors[id].jumlah_menu].sayur);
-                printf("Buah:");scanf("%s", vendors[id].menu[vendors[id].jumlah_menu].buah);
-                printf("Susu:");scanf("%s", vendors[id].menu[vendors[id].jumlah_menu].susu);
+                printf("Masukan nama menu hari ke-%d: \n", vendors[id].jumlah_menu +1);
+                printf("Karbohidrat:");gets( vendors[id].menu[vendors[id].jumlah_menu].karbohidrat);
+                printf("Protein:");gets( vendors[id].menu[vendors[id].jumlah_menu].protein);
+                printf("Sayur:");gets( vendors[id].menu[vendors[id].jumlah_menu].sayur);
+                printf("Buah:");gets( vendors[id].menu[vendors[id].jumlah_menu].buah);
+                printf("Susu:");gets( vendors[id].menu[vendors[id].jumlah_menu].susu);
                 vendors[id].jumlah_menu++;
                 vendors[id].statusRAB = BELUM_DIAJUKAN;
             }else{
@@ -173,13 +175,15 @@ void menuVendor(int id){
             if(vendors[id].jumlah_menu > 0){
                 vendors[id].jumlah_menu--;
                 printf("Menu hari terakhir dihapus.\n");
+                vendors[id].statusRAB = 0;
             }else{
                 printf("Belum ada menu.\n");
             }
             break;
             case 3:
             for(int i = 0; i < vendors[id].jumlah_menu; i++){
-                printf("Hari ke-%d: %s\n", i + 1, vendors[id].menu[i].karbohidrat);
+                printf("Hari ke-%d: \n ", i + 1);
+                printf("Karbohidrat: %s\n",vendors[id].menu[i].karbohidrat);
                 printf("Protein: %s\n", vendors[id].menu[i].protein);
                 printf("Sayur: %s\n", vendors[id].menu[i].sayur);
                 printf("Buah: %s\n", vendors[id].menu[i].buah);
@@ -209,13 +213,40 @@ void menuVendor(int id){
 
 }
 
+void simpanDataVendor(){
+    FILE *vendor;
+    vendor = fopen("dataVendor.dat", "wb");
+
+    if( vendor == NULL ){
+        printf("Gagal memasukan data vendor");
+        return;
+    }
+    fwrite(&jumlah_vendor, sizeof(jumlah_vendor), 1, vendor);
+    fwrite(vendors, sizeof(Vendor), jumlah_vendor, vendor);
+    fclose(vendor);
+}
+
+void muatDataVendor(){
+    FILE *vendor;
+    vendor = fopen("dataVendor.dat", "rb" );
+
+    if (vendor == NULL){
+        jumlah_vendor = 0;
+        return;
+    }
+    fread(&jumlah_vendor, sizeof(jumlah_vendor), 1 , vendor);
+    fread(vendors, sizeof(vendors), jumlah_vendor, vendor);
+    fclose(vendor);
+}
+
 int login(){
     char nama[50], pass[20];
     int attempts = 3;
 
     while(attempts--){
-        printf("\n--- Login ---\nNama: ");scanf("%s", &nama);
-        printf("Password: ");scanf("%s", pass);
+        getchar();
+        printf("\n--- Login ---\nNama: ");gets(nama);
+        printf("Password: ");gets(pass);
 
         if(strcmp(nama, "admin") == 0 && strcmp(pass, "123") == 0) return -99;
 
@@ -225,4 +256,78 @@ int login(){
     }
     printf("Login gagal. Silahkan coba lagi.\n");
     return -1;
+}
+
+int main (){
+    int pilihmenu;  
+    system("cls");
+    muatDataVendor();
+
+    do{
+        printf("\n-- Selamat Datang di: DMagis --\n ");
+        printf("silahkan pilih menu\n");
+        printf("1. Login admin\n");
+        printf("2. Daftar Vendor\n");
+        printf("3. Login Vendor\n");
+        printf("0. Keluar\n");printf("Pilihan: \n"); scanf("%d", &pilihmenu);
+
+
+        switch (pilihmenu)
+        {
+        case 1:{
+            int id = login();
+            if(id == -99){
+                    int pilihAd;
+                    do{
+                        printf("-- menu Admin -- \n");
+                        printf("1. Tambah Sekolah \n");
+                        printf("2. Hapus Sekolah \n");
+                        printf("3. Lihat Data Vendor\n");
+                        printf("4. Hubungkan Kerjasama\n");
+                        printf("5. Lihat kerjasama \n");
+                        printf("6. Ubah Status RAB\n");
+                        printf("0. Logout\n");printf("Pilihan: \n");scanf("%d", &pilihAd);
+                        
+                        switch (pilihAd)
+                        {
+                        case 1:
+                            tambahSekolah();
+                            break;
+                        case 2:
+                            hapusSekolah();break;
+                        case 3:
+                            lihatDataVendor();break;
+                        case 4:
+                            hubungkanSekolah();break;
+                        case 5:
+                            lihatDataKerjasama();break;
+                        case 6:
+                            ubahStatus();break;
+                            
+                            
+                        }
+                    }
+                    while(pilihAd != 0);
+                }
+                
+            }
+            case 2:
+                tambahVendor();break;
+            case 3:{
+                 int id2 = login();
+                if(id2 >= 0 ){
+                    menuVendor(id2);
+                }
+                
+            }
+               
+            case 0:
+                simpanDataVendor();
+                printf("Terimakasih telah berkunjung\n"); 
+        default:
+            break;
+        }
+    }
+    while(pilihmenu != 0);
+    return 0;
 }
