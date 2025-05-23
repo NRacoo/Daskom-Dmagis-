@@ -52,14 +52,17 @@ void sortingVendor(){
 }
 
 void tambahSekolah(){
+    getchar();
     printf("Nama Sekolah:");gets(sekolahs[jumlah_sekolah].nama_sekolah);
-    printf("Jumlah Siswa:");scanf("%d", &sekolahs[jumlah_sekolah].jumlah_siswa);
+    printf("Jumlah Siswa:\n");scanf("%d", &sekolahs[jumlah_sekolah].jumlah_siswa);
     sekolahs[jumlah_sekolah].sudahTerhubung = 0;
     jumlah_sekolah++;
+    simpanDataSekolah();
     printf("Sekolah berhasil ditambahkan.\n");
 }
 
 void hapusSekolah(){
+    getchar();
     char nama_sekolah[50];
     printf("Nama Sekolah:");gets(nama_sekolah);
     for (int i = 0; i < jumlah_sekolah; i++){
@@ -68,6 +71,7 @@ void hapusSekolah(){
                 sekolahs[j] = sekolahs[j + 1];
             }
             jumlah_sekolah--;
+            simpanDataSekolah();
             printf("Sekolah berhasil dihapus.\n");
             return;
         }
@@ -84,6 +88,7 @@ void lihatDataVendor(){
 }
 
 void hubungkanSekolah(){
+    getchar();
     char namaVendor[50], namasekolah[50];
     printf("Nama Vendor:");gets(namaVendor);
     printf("Nama Sekolah:");gets(namasekolah);
@@ -226,17 +231,51 @@ void simpanDataVendor(){
     fclose(vendor);
 }
 
+void muatDataMenu(){
+    FILE *menu;
+    menu = fopen("dataMenu.dat", "rb");
+
+    if(menu == NULL){
+        
+    }
+}
+
 void muatDataVendor(){
     FILE *vendor;
     vendor = fopen("dataVendor.dat", "rb" );
 
     if (vendor == NULL){
-        jumlah_vendor = 0;
+        jumlah_sekolah = 0;
         return;
     }
     fread(&jumlah_vendor, sizeof(jumlah_vendor), 1 , vendor);
     fread(vendors, sizeof(vendors), jumlah_vendor, vendor);
     fclose(vendor);
+}
+
+void muatDataSekolah(){
+     FILE *sekolah;
+    sekolah = fopen("dataSekolah.dat", "rb" );
+
+    if (sekolah == NULL){
+        jumlah_sekolah = 0;
+        return;
+    }
+    fread(&jumlah_sekolah, sizeof(jumlah_sekolah), 1 , sekolah );
+    fread(sekolahs, sizeof(Sekolah), jumlah_vendor, sekolah);
+    fclose(sekolah);
+
+}
+
+void simpanDataSekolah() {
+    FILE *file = fopen("dataSekolah.dat", "wb");
+    if (file == NULL) {
+        printf("Gagal menyimpan data sekolah.\n");
+        return;
+    }
+    fwrite(&jumlah_sekolah, sizeof(jumlah_sekolah), 1, file);
+    fwrite(sekolahs, sizeof(Sekolah), jumlah_sekolah, file);
+    fclose(file);
 }
 
 int login(){
@@ -261,6 +300,7 @@ int login(){
 int main (){
     int pilihmenu;  
     system("cls");
+    muatDataSekolah();
     muatDataVendor();
 
     do{
@@ -303,13 +343,17 @@ int main (){
                             lihatDataKerjasama();break;
                         case 6:
                             ubahStatus();break;
-                            
+                        case 0:
+                            pilihmenu = 0; 
+                            simpanDataSekolah();
+                            printf("Logout Berhasil !");
                             
                         }
                     }
                     while(pilihAd != 0);
+                    return 0;
                 }
-                
+                break;
             }
             case 2:
                 tambahVendor();break;
@@ -319,11 +363,13 @@ int main (){
                     menuVendor(id2);
                 }
                 
-            }
+            }break;
                
             case 0:
+                pilihmenu = 0; 
+                simpanDataSekolah();
                 simpanDataVendor();
-                printf("Terimakasih telah berkunjung\n"); 
+                printf("Terimakasih telah berkunjung\n"); break;
         default:
             break;
         }
