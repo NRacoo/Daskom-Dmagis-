@@ -348,10 +348,12 @@ void ubahKerjasama(){
             printf("2. Hapus Menu\n");
             printf("3. Lihat Menu\n");
             printf("4. Ajukan RAB\n");
+            printf("5. Ubah Menu\n");
             printf("0. Logout\n");scanf("%d", &pilih);
 
             switch(pilih){
                 case 1:
+                system  ("cls");
                 getchar();
                 if(vendors[id].jumlah_menu < MAX_menu){
                     printf("Masukan nama menu hari ke-%d: \n", vendors[id].jumlah_menu +1);
@@ -368,6 +370,7 @@ void ubahKerjasama(){
                 }
                 break;
                 case 2:
+                system  ("cls");
                 if(vendors[id].jumlah_menu > 0){
                     vendors[id].jumlah_menu--;
                     printf("Menu hari terakhir dihapus.\n");
@@ -377,6 +380,7 @@ void ubahKerjasama(){
                 }
                 break;
                 case 3:
+                system  ("cls");
                 for(int i = 0; i < vendors[id].jumlah_menu; i++){
                     
                         printf("\nHari ke-%d:\n", i + 1);
@@ -438,7 +442,32 @@ void ubahKerjasama(){
                     }
                 }
                 break;
+                case 5:
+                system  ("cls");
+                if (vendors[id].jumlah_menu == 0) {
+                    printf("Belum ada menu untuk diubah.\n");
+                    break;
+                }
+                printf("Pilih hari ke berapa menu yang ingin diubah (1-%d): ", vendors[id].jumlah_menu);
+                int index;
+                scanf("%d", &index);
+                if (index < 1 || index > vendors[id].jumlah_menu) {
+                    printf("Hari tidak valid.\n");
+                } else {
+                    getchar();
+                    index--;
+                    printf("Masukan data baru untuk hari ke-%d:\n", index + 1);
+                    printf("Karbohidrat: "); gets(vendors[id].menu[index].karbohidrat);
+                    printf("Protein: "); gets(vendors[id].menu[index].protein);
+                    printf("Sayur: "); gets(vendors[id].menu[index].sayur);
+                    printf("Buah: "); gets(vendors[id].menu[index].buah);
+                    printf("Susu: "); gets(vendors[id].menu[index].susu);
+                    vendors[id].menu[index].statusRAB = BELUM_DIAJUKAN;
+                    simpanDataVendor();
+                    printf("Menu hari ke-%d berhasil diubah.\n", index + 1);
+                }
                 case 0:
+
                     printf("Logout Berhasil !\n");
                     simpanDataVendor();
                     return;
@@ -510,13 +539,18 @@ break;
                             switch (pilihAd)
                             {
                             case 1:
+                                system  ("cls");
                                 tambahSekolah();
                                 break;
                             case 2:
+                                system  ("cls");
                                 ubahSekolah();break;
                             case 3:
+                                system  ("cls");
                                 hapusSekolah();break;
-                            case 4:{
+                            case 4:
+                                system  ("cls");{
+                                
                                 int pilihan1;
                                 printf("Pilih Data Yang ingin dilihat:\n");
                                 printf("1. Data Sekolah\n");
@@ -532,14 +566,19 @@ break;
                                 break;
                             } break;
                             case 5:
+                                system  ("cls");
                                 hubungkanSekolah();break;
                             case 6:
+                                system  ("cls");
                                 lihatDataKerjasama();break;
                             case 7:
+                                system  ("cls");
                                 ubahStatus();break;
                             case 8:
+                                system  ("cls");
                                 ubahKerjasama();break;
                             case 0:
+                                system  ("cls");
                                 pilihmenu = 0; 
                                 simpanDataSekolah();
                                 printf("Logout Berhasil !");
